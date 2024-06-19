@@ -18,14 +18,14 @@ collection = database[MONGODB_COLLECTION]
 # Streamlit app
 st.markdown("<h1 style='text-align: center;'>Akijian Reunion (Since 1991)</h1>", unsafe_allow_html=True)
 
-st.markdown("<p style='text-align: center; color : red'>**ফর্মটি পূরণ করার আগে নিচের নির্দেশনাগুলি পড়ে নিন</p>", unsafe_allow_html=True)
-name = st.text_input("Enter your name", value="", help="This field is required")
+st.markdown("<p style='text-align: center; color : tomato'>**ফর্মটি পূরণ করার আগে নিচের নির্দেশনাগুলি পড়ে নিন**</p>", unsafe_allow_html=True)
+name = st.text_input("Enter your name", value="", help="Give your full name")
 
-whatsapp_number_input = st.text_input("Enter your WhatsApp number", value="+88", help="This field is required and must be valid")
+whatsapp_number_input = st.text_input("Enter your WhatsApp number", value="+88", help="Give your valid whatsapp number")
 
-batch = st.radio("Label", ('SSC', 'HSC'), help="This field is required")
+batch = st.radio("Label", ('6','7', '8','9','10', 'SSC', 'HSC'), help="This is the label of SSC or HSC")
 
-year = st.selectbox("Select Year", options=list(range(1991, 2025)), help="This field is required")
+year = st.selectbox("Select Year", options=list(range(1991, 2025)), help="Which year your batch passed SSC/HSC exam")
 
 whatsapp_pattern = r'^\+88(013|014|015|016|017|018|019)\d{8}$'
 
@@ -48,13 +48,13 @@ is_loading = False
 if st.button("Submit", key='submit_button', disabled=is_loading):
 
     if not name or not whatsapp_number_input or not batch or not year:
-        st.error("All fields are required!")
+        st.error("সবগুলো ফিল্ড পূরণ করুন")
 
     elif not validate_whatsapp_number(whatsapp_number_input):
-        st.error("Invalid WhatsApp number format. Must start with +88 followed by valid digits.")
+        st.error("WhatsApp number টি সঠিক নয়")
 
     elif not check_whatsapp_number_unique(whatsapp_number_input):
-        st.error("WhatsApp number already exists!")
+        st.error("Number টি আগেই ব্যবহার করা হয়েছে")
 
     else:
         is_loading = True
