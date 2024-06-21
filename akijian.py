@@ -15,15 +15,18 @@ client = MongoClient(MONGODB_URL)
 database = client[MONGODB_CLIENT]
 collection = database[MONGODB_COLLECTION]
 
+total_students_in_db = collection.count_documents({})
+st.markdown(f"<h4 style='text-align: center;'>Filled Up This Form: {total_students_in_db}</h4>", unsafe_allow_html=True)
+
 # Streamlit app
 st.markdown("<h1 style='text-align: center;'>Akijian Reunion (Since 1991)</h1>", unsafe_allow_html=True)
 
 st.markdown("<p style='text-align: center; color : tomato'>**ফর্মটি পূরণ করার আগে নিচের নির্দেশনাগুলি পড়ে নিন**</p>", unsafe_allow_html=True)
 name = st.text_input("Enter your name", value="", help="Give your full name")
 
-whatsapp_number_input = st.text_input("Enter your WhatsApp number", value="+88", help="Give your valid whatsapp number")
+whatsapp_number_input = st.text_input("Enter your WhatsApp number",  help="Give your valid whatsapp number")
 
-batch = st.radio("Label", ('6','7', '8','9','10', 'SSC', 'HSC'), help="This is the label of SSC or HSC")
+batch = st.radio("Label", ('6','7', '8','9','10', 'SSC', 'HSC'), help="Please choose a class or degree")
 
 year = st.selectbox("Select Year", options=list(range(1991, 2025)), help="Which year your batch passed SSC/HSC exam")
 
@@ -34,7 +37,7 @@ def validate_whatsapp_number(number):
 
 
 def check_whatsapp_number_unique(number):
-    number = clean_whatsapp_number(number)
+    # number = clean_whatsapp_number(number)
     return collection.find_one({"no": number}) is None
 
 def clean_whatsapp_number(number):
@@ -45,13 +48,13 @@ error_message = ""
 is_loading = False
 
 
-if st.button("Submit", key='submit_button', disabled=is_loading):
+if st.button("Submit", key='form_submit_button', disabled=is_loading):
 
     if not name or not whatsapp_number_input or not batch or not year:
         st.error("সবগুলো ফিল্ড পূরণ করুন")
 
-    elif not validate_whatsapp_number(whatsapp_number_input):
-        st.error("WhatsApp number টি সঠিক নয়")
+    # elif not validate_whatsapp_number(whatsapp_number_input):
+    #     st.error("WhatsApp number টি সঠিক নয়")
 
     elif not check_whatsapp_number_unique(whatsapp_number_input):
         st.error("Number টি আগেই ব্যবহার করা হয়েছে")
